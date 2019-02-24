@@ -7,10 +7,14 @@
 */
 #pragma once
 
-#ifdef WOOTINGRGBSDK_EXPORTS  
-#define WOOTINGRGBSDK_API __declspec(dllexport)   
-#else  
-#define WOOTINGRGBSDK_API __declspec(dllimport)   
+#if defined(_WIN32) || defined(WIN32)
+#ifdef WOOTINGRGBSDK_EXPORTS
+#define WOOTINGRGBSDK_API __declspec(dllexport)
+#else
+#define WOOTINGRGBSDK_API __declspec(dllimport)
+#endif
+#else
+#define WOOTINGRGBSDK_API
 #endif
 
 #include "stdint.h"
