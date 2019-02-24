@@ -12,13 +12,15 @@
 
 #define WOOTING_COMMAND_SIZE 8
 #define WOOTING_REPORT_SIZE 129
-#define WOOTING_ONE_VID 0x03EB
+#define WOOTING_VID 0x03EB
 #define WOOTING_ONE_PID 0xFF01
+#define WOOTING_TWO_PID 0xFF02
 
 static uint16_t getCrc16ccitt(const uint8_t* buffer, uint16_t size);
 
 static void_cb disconnected_callback = NULL;
 static hid_device* keyboard_handle = NULL;
+static bool is_wooting_one = false;
 
 static uint16_t getCrc16ccitt(const uint8_t* buffer, uint16_t size)
 {
@@ -60,8 +62,14 @@ bool wooting_usb_find_keyboard() {
 		unsigned char stub = 0;
 		return hid_read_timeout(keyboard_handle, &stub, 0, 0) != -1;
 	}
-	
-	struct hid_device_info* hid_info = hid_enumerate(WOOTING_ONE_VID, WOOTING_ONE_PID);
+
+	struct hid_device_info* hid_info = hid_enumerate(WOOTING_VID, WOOTING_ONE_PID);
+	is_wooting_one = true;
+
+	if (hid_info == NULL) {
+		hid_info = hid_enumerate(WOOTING_VID, WOOTING_TWO_PID);
+		is_wooting_one = false;
+	}
 
 	if (hid_info == NULL) {
 		return false;
@@ -99,7 +107,7 @@ bool wooting_usb_find_keyboard() {
 			}
 			break;
 		}
-	
+
 		hid_info_walker = hid_info_walker->next;
 	}
 
@@ -140,6 +148,9 @@ bool wooting_usb_send_buffer(RGB_PARTS part_number, uint8_t rgb_buffer[]) {
 		break;
 	}
 	case PART4: {
+		if (is_wooting_one) {
+			return true;
+		}
 		report_buffer[4] = 2; // Slave nr
 		report_buffer[5] = 0; // Reg start address
 		break;
