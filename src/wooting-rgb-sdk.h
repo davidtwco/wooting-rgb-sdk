@@ -45,7 +45,7 @@ None.
 */
 WOOTINGRGBSDK_API void wooting_rgb_set_disconnected_cb(void_cb cb);
 
-/** @brief Reset all colors on keyboard to the original colors. 
+/** @brief Reset all colors on keyboard to the original colors.
 
 This function will restore all the colours to the colours that were originally on the keyboard. This function
 should always be called when you close the application.
@@ -135,15 +135,15 @@ WOOTINGRGBSDK_API bool wooting_rgb_array_set_single(uint8_t row, uint8_t column,
 
 /** @brief Set a full colour array.
 
-This function will set a complete color array. This will not directly update the keyboard (unless the flag is set). 
+This function will set a complete color array. This will not directly update the keyboard (unless the flag is set).
 
 If you use a non-C language it is recommended to use the wooting_rgb_array_set_single function to change the colors to avoid compatibility issues.
 
-Buffer should be layout out as [Row0Col0Red, Row0Col0Green, Row0Col0Blue, Row0Col1Red, Row0Col1Green, Row0Col1Blue, ... Row5Row20Red, Row5Row20Green, Row5Row20Blue]. 
+Buffer should be layout out as [Row0Col0Red, Row0Col0Green, Row0Col0Blue, Row0Col1Red, Row0Col1Green, Row0Col1Blue, ... Row5Row20Red, Row5Row20Green, Row5Row20Blue].
 Expected size is 6 row * 21 columns * 3 colors per key = 576 bytes.
 
 @ingroup API
-@param colors_buffer Pointer to a buffer of a full color array 
+@param colors_buffer Pointer to a buffer of a full color array
 
 @returns
 This functions return true (1) if the colours are changed (if auto update flag: updated).
